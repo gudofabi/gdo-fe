@@ -6,8 +6,8 @@ const config: ThemeConfig = {
 
 const theme = extendTheme({ config,
   fonts: {
-    heading: `'Roboto Slab', sans-serif`,
-    body: `'Merriweather Sans', sans-serif`,
+    heading: `'Roboto Slab'`,
+    body: `'Merriweather Sans'`,
   }, 
   colors: {
   gray: {
