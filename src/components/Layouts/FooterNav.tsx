@@ -13,7 +13,7 @@ function FooterNav() {
     >
       <Flex justifyContent="center" gridGap={[10, 15, 20]} alignItems="center">
         <Link
-          href="/about"
+          href="/bills"
           color="gray.700"
           borderTop="2px"
           borderColor="white"
@@ -24,7 +24,7 @@ function FooterNav() {
           <Scroll size={32} />
         </Link>
         <Link
-          href="/terms"
+          href="/bill-group"
           color="gray.700"
           borderTop="2px"
           borderColor="white"
@@ -35,7 +35,7 @@ function FooterNav() {
           <HouseLine size={32} />
         </Link>
         <Link
-          href="/privacy"
+          href="/owned"
           color="gray.700"
           borderTop="2px"
           borderColor="white"
