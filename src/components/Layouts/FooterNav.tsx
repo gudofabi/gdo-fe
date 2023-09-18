@@ -1,5 +1,6 @@
-import { Box, Flex, Link, Spacer } from "@chakra-ui/react";
+import { Box, Flex } from "@chakra-ui/react";
 import { Scroll, HouseLine, HandCoins } from "@phosphor-icons/react";
+import FooterNavLink from "./FooterNavLink";
 
 function FooterNav() {
   return (
@@ -12,39 +13,9 @@ function FooterNav() {
       zIndex="sticky" // Ensure it stays above other content
     >
       <Flex justifyContent="center" gridGap={[10, 15, 20]} alignItems="center">
-        <Link
-          href="/bills"
-          color="gray.700"
-          borderTop="2px"
-          borderColor="white"
-          paddingX="20px"
-          paddingY="14px"
-          _hover={{ color: "yellow.400", borderTop: "2px" }}
-        >
-          <Scroll size={32} />
-        </Link>
-        <Link
-          href="/bill-group"
-          color="gray.700"
-          borderTop="2px"
-          borderColor="white"
-          paddingX="20px"
-          paddingY="14px"
-          _hover={{ color: "yellow.400", borderTop: "2px" }}
-        >
-          <HouseLine size={32} />
-        </Link>
-        <Link
-          href="/owned"
-          color="gray.700"
-          borderTop="2px"
-          borderColor="white"
-          paddingX="20px"
-          paddingY="14px"
-          _hover={{ color: "yellow.400", borderTop: "2px" }}
-        >
-          <HandCoins size={32} />
-        </Link>
+        <FooterNavLink to="/bills" icon={<Scroll size={32} />} />
+        <FooterNavLink to="/" icon={<HouseLine size={32} />} />
+        <FooterNavLink to="/owned" icon={<HandCoins size={32} />} />
       </Flex>
     </Box>
   );

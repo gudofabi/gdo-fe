@@ -3,7 +3,7 @@ import avatar from "../../assets/img/avatar.png";
 
 function AppNav() {
   return (
-    <Container maxW="1440px" w={["100%", "700px", "1440px"]}>
+    <Container maxW="1280px" w={["100%", "700px", "1440px"]}>
       <HStack padding="15px" justifyContent="space-between">
         <Text fontWeight="bold" fontSize="28px">
           g'do
