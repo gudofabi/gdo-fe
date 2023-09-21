@@ -1,9 +1,7 @@
+import { Outlet } from "react-router-dom";
+
 function BillGroupPage() {
-  return (
-    <div>
-      <h1>Bill Group</h1>
-    </div>
-  );
+  return <Outlet />;
 }
 
 export default BillGroupPage;

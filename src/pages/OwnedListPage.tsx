@@ -1,9 +1,7 @@
+import { Outlet } from "react-router-dom";
+
 function OwnedListPage() {
-  return (
-    <div>
-      <h1>Owned List Page</h1>
-    </div>
-  );
+  return <Outlet />;
 }
 
 export default OwnedListPage;

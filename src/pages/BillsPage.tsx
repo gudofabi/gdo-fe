@@ -1,9 +1,7 @@
+import { Outlet } from "react-router-dom";
+
 function BillsPage() {
-  return (
-    <div>
-      <h1>Bills Page</h1>
-    </div>
-  );
+  return <Outlet />;
 }
 
 export default BillsPage;
