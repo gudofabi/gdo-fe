@@ -1,9 +1,10 @@
 import { Link, Card, CardBody, Box, Heading, Divider } from "@chakra-ui/react";
 import { Hourglass } from "@phosphor-icons/react";
 import { NavLink } from "react-router-dom";
+import { BillGroup } from "../../../pages/Bills/BillsIndexPage";
 
 interface Props {
-  item: number;
+  item: BillGroup;
 }
 
 function BillCard({ item }: Props) {
@@ -34,14 +35,14 @@ function BillCard({ item }: Props) {
             justifyContent="space-between"
           >
             <Heading fontSize="lg" fontWeight="extrabold">
-              September 23,2023
+              {item.date}
             </Heading>
             <Hourglass size={32} />
           </Box>
           <Divider borderColor="yellow.200" marginTop={4} marginBottom={4} />
           <Box w="100%" display="flex" justifyContent="flex-end">
             <Heading fontSize="lg" fontWeight="extrabold" fontFamily="body">
-              35,000.00
+              {item.total}
             </Heading>
           </Box>
         </CardBody>

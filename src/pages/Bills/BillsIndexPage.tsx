@@ -1,9 +1,33 @@
 import { Box, Link, Grid } from "@chakra-ui/react";
 import { NavLink } from "react-router-dom";
 import BillCard from "../../components/Pages/Bills/BillCard";
+import axios from "axios";
+import { useQuery } from "@tanstack/react-query";
+
+export interface BillGroup {
+  id: number;
+  date: string;
+  total: number;
+}
 
 function BillsIndexPage() {
-  const gridNumber = [1, 2, 3, 4, 5, 6, 7, 8];
+  const fetchBillGroup = async () => {
+    try {
+      const response = await axios.get(
+        "http://127.0.0.1:8000/api/v1/bill-groups"
+      );
+      return response.data;
+    } catch (error) {
+      // Handle the error, maybe log it or re-throw
+      console.error("There was an error fetching the bill group:", error);
+      throw error;
+    }
+  };
+  const { data: billGroup, isLoading } = useQuery({
+    queryKey: ["bill-group"],
+    queryFn: fetchBillGroup,
+  });
+
   return (
     <>
       <Box display="flex" justifyContent="flex-end" maxW="100%">
@@ -23,20 +47,24 @@ function BillsIndexPage() {
           Add Bill Group
         </Link>
       </Box>
-      <Grid
-        templateColumns={{
-          base: "1fr",
-          sm: "repeat(2, 1fr)",
-          md: "repeat(3, 1fr)",
-          lg: "repeat(4, 1fr)",
-        }}
-        gap={6}
-        width="100%"
-      >
-        {gridNumber.map((item) => (
-          <BillCard item={item} key={item} />
-        ))}
-      </Grid>
+      {isLoading ? (
+        <p>Loading...</p>
+      ) : (
+        <Grid
+          templateColumns={{
+            base: "1fr",
+            sm: "repeat(2, 1fr)",
+            md: "repeat(3, 1fr)",
+            lg: "repeat(4, 1fr)",
+          }}
+          gap={6}
+          width="100%"
+        >
+          {billGroup.result.data.map((item: BillGroup) => (
+            <BillCard item={item} key={item.id} />
+          ))}
+        </Grid>
+      )}
     </>
   );
 }
