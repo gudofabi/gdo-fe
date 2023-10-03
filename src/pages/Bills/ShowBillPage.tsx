@@ -1,6 +1,12 @@
+import { useParams, useNavigate } from "react-router-dom";
+import { useQuery } from "@tanstack/react-query";
+import axios from "axios";
+import { formatDate } from "../../shared/helpers.tsx";
+
 import {
   Box,
   Button,
+  Container,
   HStack,
   Heading,
   IconButton,
@@ -8,26 +14,58 @@ import {
   MenuButton,
   MenuItem,
   MenuList,
-  Table,
-  TableCaption,
-  TableContainer,
   Tbody,
   Td,
-  Th,
-  Thead,
   Tr,
 } from "@chakra-ui/react";
+import BillsTable from "../../components/Pages/BillGroup/BillsTable";
+
 import {
   ArrowUUpLeft,
   DotsThreeOutlineVertical,
   PencilSimple,
   TrashSimple,
 } from "@phosphor-icons/react";
-import { useParams, useNavigate } from "react-router-dom";
+
+interface Bills {
+  id: number;
+  name: string;
+  amount: number;
+}
 
 function ShowBillPage() {
   const { billsId } = useParams();
   const navigation = useNavigate();
+
+  const fetchBillGroup = async () => {
+    try {
+      const response = await axios.get(
+        `http://127.0.0.1:8000/api/v1/bill-groups/${billsId}`
+      );
+      return response.data;
+    } catch (error) {
+      // Handle the error, maybe log it or re-throw
+      console.error("There was an error fetching the bill group:", error);
+      throw error;
+    }
+  };
+
+  const { data: bills, isLoading } = useQuery({
+    queryKey: ["bill-group", billsId],
+    queryFn: fetchBillGroup,
+  });
+
+  const headers = ["Name", "Amount", "Action"];
+
+  const func_billsMap = () => {
+    return bills.result?.bills.map((item: Bills) => (
+      <Tr key={item.id}>
+        <Td>{item.name}</Td>
+        <Td isNumeric>{item.amount}</Td>
+        <Td></Td>
+      </Tr>
+    ));
+  };
 
   return (
     <Box paddingBottom={20}>
@@ -51,83 +89,41 @@ function ShowBillPage() {
         </Menu>
       </HStack>
       <Box paddingY={10}>
-        <Heading fontSize="2xl">September 29,2023 - {billsId}</Heading>
+        <Heading fontSize="2xl">
+          {bills?.result?.date ? formatDate(bills?.result?.date) : ""}
+        </Heading>
       </Box>
-      <TableContainer borderTop="1px" borderBottom="1px" borderColor="gray.300">
-        <Table variant="simple" size="lg">
-          <TableCaption>
-            <Button
-              borderRadius="30px"
-              paddingX={10}
-              backgroundColor="yellow.400"
-              paddingY={3}
-              textColor="gray.800"
-              _hover={{
-                bg: "yellow.500",
-              }}
-              marginY={8}
+      {isLoading ? (
+        <Container textAlign="center">Loading...</Container>
+      ) : (
+        <>
+          <BillsTable headers={headers}>
+            <Tbody color="gray.600">
+              {bills.result?.bills.length == 0 ? (
+                <Tr>
+                  <Td colSpan={3} textAlign="center">
+                    No bills available
+                  </Td>
+                </Tr>
+              ) : (
+                func_billsMap()
+              )}
+            </Tbody>
+          </BillsTable>
+
+          <HStack justifyContent="space-between" paddingY={6}>
+            <Box w={["0", "50%"]}></Box>
+            <Box
+              w={["100%", "50%"]}
+              display="flex"
+              justifyContent="space-between"
             >
-              Add Item
-            </Button>
-          </TableCaption>
-          <Thead>
-            <Tr paddingY={4}>
-              <Th
-                fontFamily="heading"
-                fontSize="lg"
-                color="gray.800"
-                textTransform="capitalize"
-                paddingTop={10}
-              >
-                Name
-              </Th>
-              <Th
-                fontFamily="heading"
-                fontSize="lg"
-                color="gray.800"
-                textTransform="capitalize"
-                paddingTop={10}
-              >
-                Amount
-              </Th>
-              <Th
-                fontFamily="heading"
-                fontSize="lg"
-                color="gray.800"
-                textTransform="capitalize"
-                paddingTop={10}
-                textAlign="right"
-              >
-                Action
-              </Th>
-            </Tr>
-          </Thead>
-          <Tbody color="gray.600">
-            <Tr>
-              <Td>inches</Td>
-              <Td>millimetres (mm)</Td>
-              <Td isNumeric>25.4</Td>
-            </Tr>
-            <Tr>
-              <Td>feet</Td>
-              <Td>centimetres (cm)</Td>
-              <Td isNumeric>30.48</Td>
-            </Tr>
-            <Tr>
-              <Td>yards</Td>
-              <Td>metres (m)</Td>
-              <Td isNumeric>0.91444</Td>
-            </Tr>
-          </Tbody>
-        </Table>
-      </TableContainer>
-      <HStack justifyContent="space-between" paddingY={6}>
-        <Box w={["0", "50%"]}></Box>
-        <Box w={["100%", "50%"]} display="flex" justifyContent="space-between">
-          <Heading fontSize="2xl">Total Bills</Heading>
-          <Heading fontSize="2xl">23,6000.00</Heading>
-        </Box>
-      </HStack>
+              <Heading fontSize="2xl">Total Bills</Heading>
+              <Heading fontSize="2xl">23,6000.00</Heading>
+            </Box>
+          </HStack>
+        </>
+      )}
     </Box>
   );
 }

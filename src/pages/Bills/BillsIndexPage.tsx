@@ -1,8 +1,9 @@
+import { useQuery } from "@tanstack/react-query";
+import axios from "axios";
+
 import { Box, Link, Grid } from "@chakra-ui/react";
 import { NavLink } from "react-router-dom";
 import BillCard from "../../components/Pages/Bills/BillCard";
-import axios from "axios";
-import { useQuery } from "@tanstack/react-query";
 
 export interface BillGroup {
   id: number;

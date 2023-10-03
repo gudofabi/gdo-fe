@@ -1,3 +1,5 @@
+import { formatDate } from "../../../shared/helpers";
+
 import { Link, Card, CardBody, Box, Heading, Divider } from "@chakra-ui/react";
 import { Hourglass } from "@phosphor-icons/react";
 import { NavLink } from "react-router-dom";
@@ -11,7 +13,7 @@ function BillCard({ item }: Props) {
   return (
     <Link
       as={NavLink}
-      to={`/bills/${item}`}
+      to={`/bills/${item.id}`}
       _hover={{ textDecoration: "none" }}
     >
       <Card
@@ -35,7 +37,7 @@ function BillCard({ item }: Props) {
             justifyContent="space-between"
           >
             <Heading fontSize="lg" fontWeight="extrabold">
-              {item.date}
+              {formatDate(item.date)}
             </Heading>
             <Hourglass size={32} />
           </Box>
