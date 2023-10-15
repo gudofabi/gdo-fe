@@ -17,6 +17,7 @@ import {
   Tbody,
   Td,
   Tr,
+  useDisclosure,
 } from "@chakra-ui/react";
 import BillsTable from "../../components/Pages/BillGroup/BillsTable";
 
@@ -26,6 +27,7 @@ import {
   PencilSimple,
   TrashSimple,
 } from "@phosphor-icons/react";
+import AlertDialogModal from "../../components/Common/AlertDialog.tsx";
 
 interface Bills {
   id: number;
@@ -67,64 +69,86 @@ function ShowBillPage() {
     ));
   };
 
-  return (
-    <Box paddingBottom={20}>
-      <HStack justifyContent="space-between" alignContent="center" paddingY={4}>
-        <Button onClick={() => navigation(-1)} variant="ghost">
-          <ArrowUUpLeft size={32} />
-        </Button>
-        <Menu>
-          <MenuButton
-            as={IconButton}
-            aria-label="Options"
-            icon={<DotsThreeOutlineVertical size={32} weight="fill" />}
-            variant="ghost"
-          />
-          <MenuList>
-            <MenuItem icon={<PencilSimple size={32} />}>Update</MenuItem>
-            <MenuItem icon={<TrashSimple size={32} color="tomato" />}>
-              Delete
-            </MenuItem>
-          </MenuList>
-        </Menu>
-      </HStack>
-      <Box paddingY={10}>
-        <Heading fontSize="2xl">
-          {bills?.result?.date ? formatDate(bills?.result?.date) : ""}
-        </Heading>
-      </Box>
-      {isLoading ? (
-        <Container textAlign="center">Loading...</Container>
-      ) : (
-        <>
-          <BillsTable headers={headers}>
-            <Tbody color="gray.600">
-              {bills.result?.bills.length == 0 ? (
-                <Tr>
-                  <Td colSpan={3} textAlign="center">
-                    No bills available
-                  </Td>
-                </Tr>
-              ) : (
-                func_billsMap()
-              )}
-            </Tbody>
-          </BillsTable>
+  const {
+    isOpen: isOpenDialog,
+    onOpen: onOpenDialog,
+    onClose: onCloseDialog,
+  } = useDisclosure();
 
-          <HStack justifyContent="space-between" paddingY={6}>
-            <Box w={["0", "50%"]}></Box>
-            <Box
-              w={["100%", "50%"]}
-              display="flex"
-              justifyContent="space-between"
-            >
-              <Heading fontSize="2xl">Total Bills</Heading>
-              <Heading fontSize="2xl">23,6000.00</Heading>
-            </Box>
-          </HStack>
-        </>
-      )}
-    </Box>
+  return (
+    <>
+      <Box paddingBottom={20}>
+        <HStack
+          justifyContent="space-between"
+          alignContent="center"
+          paddingY={4}
+        >
+          <Button onClick={() => navigation(-1)} variant="ghost">
+            <ArrowUUpLeft size={32} />
+          </Button>
+          <Menu>
+            <MenuButton
+              as={IconButton}
+              aria-label="Options"
+              icon={<DotsThreeOutlineVertical size={32} weight="fill" />}
+              variant="ghost"
+            />
+            <MenuList>
+              <MenuItem icon={<PencilSimple size={32} />}>Update</MenuItem>
+              <MenuItem
+                icon={<TrashSimple size={32} color="tomato" />}
+                onClick={onOpenDialog}
+              >
+                Delete
+              </MenuItem>
+            </MenuList>
+          </Menu>
+        </HStack>
+        <Box paddingY={10}>
+          <Heading fontSize="2xl">
+            {bills?.result?.date ? formatDate(bills?.result?.date) : ""}
+          </Heading>
+        </Box>
+        {isLoading ? (
+          <Container textAlign="center">Loading...</Container>
+        ) : (
+          <>
+            <BillsTable headers={headers}>
+              <Tbody color="gray.600">
+                {bills.result?.bills.length == 0 ? (
+                  <Tr>
+                    <Td colSpan={3} textAlign="center">
+                      No bills available
+                    </Td>
+                  </Tr>
+                ) : (
+                  func_billsMap()
+                )}
+              </Tbody>
+            </BillsTable>
+
+            <HStack justifyContent="space-between" paddingY={6}>
+              <Box w={["0", "50%"]}></Box>
+              <Box
+                w={["100%", "50%"]}
+                display="flex"
+                justifyContent="space-between"
+              >
+                <Heading fontSize="2xl">Total Bills</Heading>
+                <Heading fontSize="2xl">23,6000.00</Heading>
+              </Box>
+            </HStack>
+          </>
+        )}
+      </Box>
+
+      <AlertDialogModal
+        isOpen={isOpenDialog}
+        onClose={onCloseDialog}
+        title="Delete Bill Group?"
+        message="Are you sure you want to delete the Bill Group?"
+      />
+    </>
   );
 }
 

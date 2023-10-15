@@ -1,5 +1,6 @@
 import BillGroupCreatePage from "../pages/BillGroup/BillGroupCreatePage";
 import BillGroupIndexPage from "../pages/BillGroup/BillGroupIndexPage";
+import ShowBillGroupPage from "../pages/BillGroup/ShowBillGroupPage";
 import BillGroupPage from "../pages/BillGroupPage";
 
 const billGroupRoute = {
@@ -13,6 +14,10 @@ const billGroupRoute = {
     {
       path: "create",
       element: <BillGroupCreatePage />,
+    },
+    {
+      path: ":billGroupId",
+      element: <ShowBillGroupPage />,
     },
   ],
 };
